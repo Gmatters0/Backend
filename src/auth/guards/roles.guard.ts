@@ -22,14 +22,12 @@ export class RolesGuard implements CanActivate {
 
     const { user } = context.switchToHttp().getRequest();
 
-    // **AQUI ESTÁ A CORREÇÃO CRUCIAL**
     // Se não existir um usuário na requisição, não há como checar o perfil.
     // Isso acontece em rotas públicas.
     if (!user) {
       return false;
     }
 
-    // Continua com a lógica original se o usuário existir.
     return requiredRoles.some((role) => user.role?.includes(role));
   }
 }
