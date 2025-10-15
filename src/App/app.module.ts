@@ -5,6 +5,8 @@ import { DatabaseModule } from '../database/database.module';
 import { UserModule } from '../user/user.module';
 import { AuthModule } from '../auth/auth.module';
 import { ConfigModule } from '@nestjs/config';
+import { UnidadeModule } from 'src/unidade/unidade.module';
+import { MoradorModule } from 'src/morador/morador.module';
 
 @Module({
   imports: [
@@ -14,6 +16,8 @@ import { ConfigModule } from '@nestjs/config';
     DatabaseModule,
     UserModule,
     AuthModule,
+    UnidadeModule,
+    MoradorModule,
   ],
   controllers: [AppController],
   providers: [AppService],
