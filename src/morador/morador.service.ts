@@ -1,6 +1,8 @@
-// src/morador/morador.service.ts
-
-import { Injectable, BadRequestException } from '@nestjs/common';
+import {
+  Injectable,
+  BadRequestException,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Morador } from './entities/morador.entity';
@@ -8,6 +10,7 @@ import { CreateMoradorDto } from './dto/create-morador.dto';
 import { UserService } from 'src/user/user.service';
 import { UnidadeService } from 'src/unidade/unidade.service';
 import { User } from 'src/user/entities/user.entity';
+import { UpdateMoradorDto } from './dto/update-morador.dto';
 
 @Injectable()
 export class MoradorService {
@@ -53,16 +56,50 @@ export class MoradorService {
     // 4. Cria a entidade Morador e associa o usuário e a unidade
     const newMorador = this.moradorRepository.create({
       ...moradorData,
-      cpf: cpf, // <-- AQUI ESTÁ A CORREÇÃO!
+      cpf: cpf,
       user: newUser,
       unidade: unidade,
     });
 
-    // 5. Salva o morador (e o usuário, graças ao cascade)
     return this.moradorRepository.save(newMorador);
   }
 
-  findAll(): Promise<Morador[]> {
-    return this.moradorRepository.find();
+  async findAll() {
+    const moradores = await this.moradorRepository.find({
+      relations: ['unidade'],
+      order: {
+        id: 'desc',
+      },
+    });
+
+    if (moradores.length === 0) {
+      throw new NotFoundException();
+    }
+
+    return moradores;
+  }
+
+  async update(id: number, updateMoradorDto: UpdateMoradorDto) {
+    const partialUpdateMoradorDto = {
+      ...updateMoradorDto,
+    };
+    const morador = await this.moradorRepository.preload({
+      id,
+      ...partialUpdateMoradorDto,
+    });
+
+    if (!morador) throw new NotFoundException();
+
+    return this.moradorRepository.save(morador);
+  }
+
+  async remove(id: number) {
+    const morador = await this.moradorRepository.findOneBy({ id });
+
+    if (!morador) {
+      throw new NotFoundException();
+    }
+
+    return this.moradorRepository.remove(morador);
   }
 }

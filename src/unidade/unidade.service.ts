@@ -16,7 +16,9 @@ export class UnidadeService {
   }
 
   findAll() {
-    return this.unidadeRepository.find();
+    return this.unidadeRepository.find({
+      relations: ['moradores'],
+    });
   }
 
   findOne(id: number) {

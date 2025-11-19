@@ -7,6 +7,9 @@ import { AuthModule } from '../auth/auth.module';
 import { ConfigModule } from '@nestjs/config';
 import { UnidadeModule } from 'src/unidade/unidade.module';
 import { MoradorModule } from 'src/morador/morador.module';
+import { PrestadorModule } from 'src/prestador/prestador.module';
+import { AreaComumModule } from 'src/area-comum/area-comum.module';
+import { ReservaModule } from 'src/reserva/reserva.module';
 
 @Module({
   imports: [
@@ -18,6 +21,9 @@ import { MoradorModule } from 'src/morador/morador.module';
     AuthModule,
     UnidadeModule,
     MoradorModule,
+    PrestadorModule,
+    AreaComumModule,
+    ReservaModule,
   ],
   controllers: [AppController],
   providers: [AppService],

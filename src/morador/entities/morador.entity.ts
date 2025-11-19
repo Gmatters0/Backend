@@ -30,6 +30,10 @@ export class Morador {
   @JoinColumn()
   user: User;
 
-  @ManyToOne(() => Unidade, (unidade) => unidade.moradores, { eager: true })
+  @ManyToOne(() => Unidade, (unidade) => unidade.moradores)
+  @JoinColumn({ name: 'unidadeId' }) // Garante que usa a coluna 'unidadeId' que você já tem no banco
   unidade: Unidade;
+
+  @Column({ name: 'unidadeId' }) // Se você já tem essa coluna explícita, mantenha
+  unidadeId: number;
 }
