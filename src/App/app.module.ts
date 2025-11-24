@@ -10,6 +10,7 @@ import { MoradorModule } from 'src/morador/morador.module';
 import { PrestadorModule } from 'src/prestador/prestador.module';
 import { AreaComumModule } from 'src/area-comum/area-comum.module';
 import { ReservaModule } from 'src/reserva/reserva.module';
+import { OrdemServicoModule } from 'src/ordem-servico/ordem-servico.module';
 
 @Module({
   imports: [
@@ -24,6 +25,7 @@ import { ReservaModule } from 'src/reserva/reserva.module';
     PrestadorModule,
     AreaComumModule,
     ReservaModule,
+    OrdemServicoModule,
   ],
   controllers: [AppController],
   providers: [AppService],

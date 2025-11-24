@@ -1,4 +1,10 @@
-import { Entity, Column, PrimaryGeneratedColumn, ManyToOne } from 'typeorm';
+import {
+  Entity,
+  Column,
+  PrimaryGeneratedColumn,
+  ManyToOne,
+  CreateDateColumn,
+} from 'typeorm';
 import { Morador } from 'src/morador/entities/morador.entity';
 import { AreaComum } from 'src/area-comum/entities/area-comum.entity';
 
@@ -8,17 +14,20 @@ export class Reserva {
   id: number;
 
   @Column({ type: 'date' })
-  data: string; // YYYY-MM-DD
+  data: string;
 
   @Column({ type: 'time' })
-  horaInicio: string; // HH:mm:ss
+  horaInicio: string;
 
   @Column({ type: 'time' })
-  horaFim: string; // HH:mm:ss
+  horaFim: string;
 
-  @ManyToOne(() => Morador, { eager: true }) // Carrega o morador junto automaticamente
+  @CreateDateColumn()
+  dataCriacao: Date;
+
+  @ManyToOne(() => Morador, { eager: true })
   morador: Morador;
 
-  @ManyToOne(() => AreaComum, { eager: true }) // Carrega a área junto automaticamente
+  @ManyToOne(() => AreaComum, { eager: true })
   areaComum: AreaComum;
 }
