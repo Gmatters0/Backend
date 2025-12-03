@@ -7,6 +7,8 @@ import { Prestador } from 'src/prestador/entities/prestador.entity';
 import { AreaComum } from 'src/area-comum/entities/area-comum.entity';
 import { Reserva } from 'src/reserva/entities/reserva.entity';
 import { OrdemServico } from 'src/ordem-servico/entities/ordem-servico.entity';
+import { Visitante } from 'src/visitante/entities/visitante.entity';
+import { Aviso } from 'src/aviso/entities/aviso.entity';
 
 @Module({
   imports: [
@@ -25,6 +27,8 @@ import { OrdemServico } from 'src/ordem-servico/entities/ordem-servico.entity';
         AreaComum,
         Reserva,
         OrdemServico,
+        Visitante,
+        Aviso,
       ],
       synchronize: true, // Em desenvolvimento, para produção use migrations
     }),

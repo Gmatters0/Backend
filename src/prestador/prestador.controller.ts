@@ -1,7 +1,16 @@
-import { Controller, Get, Post, Body, Param, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Param,
+  Delete,
+  Patch,
+} from '@nestjs/common';
 import { PrestadorService } from './prestador.service';
 import { CreatePrestadorDto } from './dto/create-prestador.dto';
 import { Roles } from 'src/auth/decorators/roles.decorator';
+import { UpdatePrestadorDto } from './dto/update-prestador.dto';
 
 @Controller('prestadores')
 export class PrestadorController {
@@ -23,6 +32,15 @@ export class PrestadorController {
   @Roles('admin')
   findOne(@Param('id') id: string) {
     return this.prestadorService.findOne(+id);
+  }
+
+  @Patch(':id')
+  @Roles('admin')
+  update(
+    @Param('id') id: string,
+    @Body() updatePrestadorDto: UpdatePrestadorDto
+  ) {
+    return this.prestadorService.update(+id, updatePrestadorDto);
   }
 
   @Delete(':id')

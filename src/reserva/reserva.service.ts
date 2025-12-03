@@ -1,8 +1,13 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Reserva } from './entities/reserva.entity';
 import { CreateReservaDto } from './dto/create-reserva.dto';
+import { UpdateReservaDto } from './dto/update-reserva.dto';
 
 @Injectable()
 export class ReservaService {
@@ -52,5 +57,46 @@ export class ReservaService {
       relations: ['areaComum', 'morador', 'morador.unidade'],
       order: { horaInicio: 'ASC' },
     });
+  }
+
+  async findOne(id: number) {
+    const reserva = await this.reservaRepository.findOne({
+      where: { id },
+      relations: ['areaComum', 'morador'],
+    });
+    if (!reserva) throw new NotFoundException(`Reserva #${id} não encontrada`);
+    return reserva;
+  }
+
+  async update(id: number, updateReservaDto: UpdateReservaDto) {
+    const conflitos = await this.reservaRepository
+      .createQueryBuilder('reserva')
+      .where('reserva.areaComumId = :areaId', {
+        areaId: updateReservaDto.areaComumId,
+      })
+      .andWhere('reserva.data = :data', { data: updateReservaDto.data })
+      .andWhere('(:inicio < reserva.horaFim AND :fim > reserva.horaInicio)', {
+        inicio: updateReservaDto.horaInicio,
+        fim: updateReservaDto.horaFim,
+      })
+      .getCount();
+
+    if (conflitos > 0) {
+      throw new BadRequestException('Horário indisponível para esta área.');
+    }
+
+    const reserva = await this.reservaRepository.preload({
+      id,
+      ...UpdateReservaDto,
+    });
+    if (!reserva) throw new NotFoundException(`Reserva #${id} não encontrada`);
+    return this.reservaRepository.save(reserva);
+  }
+
+  async remove(id: number) {
+    const result = await this.reservaRepository.delete(id);
+    if (result.affected === 0) {
+      throw new NotFoundException(`Reserva #${id} não encontrada`);
+    }
   }
 }

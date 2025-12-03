@@ -1,8 +1,9 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Prestador } from './entities/prestador.entity';
 import { CreatePrestadorDto } from './dto/create-prestador.dto';
+import { UpdatePrestadorDto } from './dto/update-prestador.dto';
 
 @Injectable()
 export class PrestadorService {
@@ -22,6 +23,17 @@ export class PrestadorService {
 
   findOne(id: number) {
     return this.prestadorRepository.findOne({ where: { id } });
+  }
+
+  async update(id: number, updatePrestadorDto: UpdatePrestadorDto) {
+    const prestador = await this.prestadorRepository.preload({
+      id,
+      ...updatePrestadorDto,
+    });
+    if (!prestador) {
+      throw new NotFoundException(`Prestador #${id} não encontrado`);
+    }
+    return this.prestadorRepository.save(prestador);
   }
 
   remove(id: number) {

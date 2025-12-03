@@ -11,11 +11,14 @@ import { PrestadorModule } from 'src/prestador/prestador.module';
 import { AreaComumModule } from 'src/area-comum/area-comum.module';
 import { ReservaModule } from 'src/reserva/reserva.module';
 import { OrdemServicoModule } from 'src/ordem-servico/ordem-servico.module';
+import { VisitanteModule } from 'src/visitante/visitante.module';
+import { AvisoModule } from 'src/aviso/aviso.module';
+import { MailModule } from 'src/mail/mail.module';
 
 @Module({
   imports: [
     ConfigModule.forRoot({
-      isGlobal: true, // Torna as variáveis de ambiente disponíveis em toda a aplicação
+      isGlobal: true,
     }),
     DatabaseModule,
     UserModule,
@@ -26,6 +29,9 @@ import { OrdemServicoModule } from 'src/ordem-servico/ordem-servico.module';
     AreaComumModule,
     ReservaModule,
     OrdemServicoModule,
+    VisitanteModule,
+    AvisoModule,
+    MailModule,
   ],
   controllers: [AppController],
   providers: [AppService],

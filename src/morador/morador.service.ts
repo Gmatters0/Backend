@@ -32,7 +32,6 @@ export class MoradorService {
       );
     }
 
-    // 2. Verifica se o CPF ou Email já existem
     const moradorExists = await this.moradorRepository.findOne({
       where: { cpf },
     });
@@ -46,14 +45,12 @@ export class MoradorService {
       );
     }
 
-    // 3. Cria a entidade User
     const newUser = new User();
     newUser.email = email;
     newUser.password = senha;
     newUser.nome = moradorData.nome;
     newUser.role = 'morador';
 
-    // 4. Cria a entidade Morador e associa o usuário e a unidade
     const newMorador = this.moradorRepository.create({
       ...moradorData,
       cpf: cpf,
@@ -72,11 +69,22 @@ export class MoradorService {
       },
     });
 
-    if (moradores.length === 0) {
-      throw new NotFoundException();
-    }
+    // if (moradores.length === 0) {
+    //   throw new NotFoundException();
+    // }
 
     return moradores;
+  }
+
+  async findOne(id: number) {
+    const morador = await this.moradorRepository.findOne({
+      where: { id },
+      relations: ['unidade', 'user'],
+    });
+    if (!morador) {
+      throw new NotFoundException(`Morador #${id} não encontrado`);
+    }
+    return morador;
   }
 
   async update(id: number, updateMoradorDto: UpdateMoradorDto) {

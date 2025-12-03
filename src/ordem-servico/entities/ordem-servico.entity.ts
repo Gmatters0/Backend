@@ -22,7 +22,7 @@ export class OrdemServico {
   prioridade: 'baixa' | 'media' | 'alta';
 
   @Column({ default: 'aberto' })
-  status: 'aberto' | 'em andamento' | 'fechado';
+  status: 'aberto' | 'em andamento' | 'concluido' | 'cancelado';
 
   @ManyToOne(() => Prestador, { eager: true })
   prestador: Prestador;

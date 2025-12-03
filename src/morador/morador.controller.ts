@@ -28,6 +28,12 @@ export class MoradorController {
     return this.moradorService.findAll();
   }
 
+  @Get(':id')
+  @Roles('admin')
+  findOne(@Param('id') id: string) {
+    return this.moradorService.findOne(+id);
+  }
+
   @Patch(':id')
   @Roles('admin')
   update(@Param('id') id: string, @Body() updateMoradorDto: UpdateMoradorDto) {
